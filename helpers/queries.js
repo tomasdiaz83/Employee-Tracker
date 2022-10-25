@@ -1,4 +1,4 @@
-const viewDepartments = () => {
+const viewDepartments = (db) => {
     db.query(`
         SELECT d.dept_name as "Department",
             d.id as "ID"
@@ -14,7 +14,7 @@ const viewDepartments = () => {
     );
 }
 
-const viewRoles = () => {
+const viewRoles = (db) => {
     db.query(`
         SELECT r.title as "Job Title",
             r.id as "ID",
@@ -34,7 +34,7 @@ const viewRoles = () => {
     );
 }
 
-const viewEmployees = () => {
+const viewEmployees = (db) => {
     db.query(`
         SELECT e.id as "Employee ID", 
             e.first_name AS "First Name", 
@@ -60,3 +60,5 @@ const viewEmployees = () => {
         }
     );
 }
+
+module.exports = { viewDepartments, viewEmployees, viewRoles}
