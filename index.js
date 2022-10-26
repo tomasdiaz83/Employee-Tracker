@@ -16,20 +16,37 @@ const db = mysql.createConnection(
 );
 
 const init = () => {
-    inquirer
-        .prompt(questions.opening)
-        .then(choice => {
-            switch(choice.action) {
+    inquirer.prompt(questions.opening)
+        .then((data) => {
+            let choice = data.action;
+            
+            // if (choice == 'View all departments') {
+            //     return viewDepartments(db, init);
+            // }
+            switch(choice) {
                 case 'View all departments':
-                    return viewDepartments(db);
+                    viewDepartments(db, init);
+                    break;
                 case 'View all roles':
-                    return viewRoles(db);
+                    viewRoles(db, init);
+                    break;
                 case 'View all employees':
-                    return viewEmployees(db);
+                    viewEmployees(db, init);
+                    break;
+                case 'EXIT':
+                    db.close();
                 default:
                     break;
-            }
-        })
+            };
+
+        });
+    //await selector(choice.action);
+    
+}
+
+const selector = async (action) => {
+    
+    return init();
 }
 
 init();

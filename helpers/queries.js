@@ -1,4 +1,8 @@
-const viewDepartments = (db) => {
+const viewDepartments = (db, init) => {
+    console.log('=========================')
+    console.log('=======Departments=======')
+    console.log('=========================')
+    
     db.query(`
         SELECT d.dept_name as "Department",
             d.id as "ID"
@@ -8,13 +12,18 @@ const viewDepartments = (db) => {
             if (err) {
                 console.log(err);
             } else {
-                console.table(results)
+                console.table(results);
+                return init();
             }
         }
     );
 }
 
-const viewRoles = (db) => {
+const viewRoles = (db, init) => {
+    console.log('=========================')
+    console.log('==========Roles==========')
+    console.log('=========================')
+
     db.query(`
         SELECT r.title as "Job Title",
             r.id as "ID",
@@ -28,13 +37,18 @@ const viewRoles = (db) => {
             if (err) {
                 console.log(err);
             } else {
-                console.table(results)
+                console.table(results);
+                return init();
             }
         }
     );
 }
 
-const viewEmployees = (db) => {
+const viewEmployees = (db, init) => {
+    console.log('=========================')
+    console.log('==========Roles==========')
+    console.log('=========================')
+
     db.query(`
         SELECT e.id as "Employee ID", 
             e.first_name AS "First Name", 
@@ -56,6 +70,7 @@ const viewEmployees = (db) => {
                 console.log(err);
             } else {
                 console.table(results)
+                return init();
             }
         }
     );
