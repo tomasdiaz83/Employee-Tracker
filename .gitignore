@@ -105,5 +105,5 @@ dist
 
 # other
 instructions/
-test.js
+# test.js
 queries.sql
