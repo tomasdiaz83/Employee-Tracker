@@ -1,9 +1,10 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const { viewDepartments, viewEmployees, viewRoles } = require('./helpers/queries')
+const { viewDepartments, viewEmployees, viewRoles } = require('./lib/queries');
+const { createDept, createRole, createEmployee } = require('./lib/inserts&updates');
 
-const questions = require('./helpers/questions');
+const questions = require('./lib/questions');
 
 const db = mysql.createConnection(
     {
@@ -20,9 +21,6 @@ const init = () => {
         .then((data) => {
             let choice = data.action;
             
-            // if (choice == 'View all departments') {
-            //     return viewDepartments(db, init);
-            // }
             switch(choice) {
                 case 'View all departments':
                     viewDepartments(db, init);
@@ -33,6 +31,15 @@ const init = () => {
                 case 'View all employees':
                     viewEmployees(db, init);
                     break;
+                case 'Add a department':
+                    createDept(db, init);
+                    break;
+                case 'Add a role':
+                    createRole(db, getDeptArray, init);
+                    break;
+                case 'Add an employee':
+                    createEmployee(db, getEmployeeArray, init)
+                    break;
                 case 'EXIT':
                     db.close();
                 default:
@@ -40,13 +47,33 @@ const init = () => {
             };
 
         });
-    //await selector(choice.action);
     
 }
 
-const selector = async (action) => {
-    
-    return init();
-}
+const getDeptArray = () => {
+    let array = [];
+
+    db.query('SELECT dept_name FROM department', (err, result) => {
+        for (let { dept_name } of result) { 
+            array.push(dept_name);        
+        }
+    });
+
+    return array;
+};
+
+const getEmployeeArray = () => {
+    let array = [];
+
+    db.query('SELECT CONCAT(first_name, " ", last_name) as employees FROM Employee', (err, result) => {
+        for (let i = 0; i<result.length; i++) { 
+            let employees = result[i];
+            let { employee } = employees;
+            array.push(employee);        
+        }
+    });
+
+    return array;
+};
 
 init();

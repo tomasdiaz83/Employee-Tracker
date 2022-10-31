@@ -1,3 +1,6 @@
+INSERT INTO department (dept_name)
+    VALUES ("test");
+
 SELECT e.id as "Employee ID", 
     e.first_name AS "First Name", 
     e.last_name AS "Last Name",
