@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 const { viewDepartments, viewEmployees, viewRoles } = require('./lib/queries');
-const { createDept, createRole, createEmployee } = require('./lib/inserts&updates');
+const { createDept, createRole, createEmployee, updateEmployee } = require('./lib/inserts&updates');
 
 const questions = require('./lib/questions');
 
@@ -38,7 +38,10 @@ const init = () => {
                     createRole(db, getDeptArray, init);
                     break;
                 case 'Add an employee':
-                    createEmployee(db, getEmployeeArray, init)
+                    createEmployee(db, getEmployeeArray, getRoleArray, init)
+                    break;
+                case 'Update an employee':
+                    updateEmployee(db, getEmployeeArray, getRoleArray, init)
                     break;
                 case 'EXIT':
                     db.close();
@@ -51,29 +54,39 @@ const init = () => {
 }
 
 const getDeptArray = () => {
-    let array = [];
+    let depArray = [];
 
     db.query('SELECT dept_name FROM department', (err, result) => {
         for (let { dept_name } of result) { 
-            array.push(dept_name);        
+            depArray.push(dept_name);        
         }
     });
 
-    return array;
+    return depArray;
 };
 
-const getEmployeeArray = () => {
-    let array = [];
+const getEmployeeArray = () => {    
+    let empArray = [];
 
     db.query('SELECT CONCAT(first_name, " ", last_name) as employees FROM Employee', (err, result) => {
-        for (let i = 0; i<result.length; i++) { 
-            let employees = result[i];
-            let { employee } = employees;
-            array.push(employee);        
+        for (let { employees } of result) { 
+            empArray.push(employees);        
         }
     });
 
-    return array;
+    return empArray;
+};
+
+const getRoleArray = () => {    
+    let roArray = [];
+
+    db.query('SELECT title as roles FROM role', (err, result) => {
+        for (let { roles } of result) { 
+            roArray.push(roles);        
+        }
+    });
+
+    return roArray;
 };
 
 init();
